@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spacer Selection Form</title>
+  <style>
+    :root {
+      --primary-blue: #1f4e79;
+      --secondary-blue: #4a90e2;
+      --light-blue: #e8f4fd;
+      --accent-green: #2e7d32;
+      --light-green: #e8f5e8;
+      --yellow-highlight: #ffeb3b;
+      --grey-bg: #f8f9fa;
+      --border-color: #dee2e6;
+      --text-primary: #212529;
+      --text-secondary: #6c757d;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --font-main: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: linear-gradient(135deg, var(--grey-bg) 0%, #ffffff 100%);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+      color: white;
+      padding: 1rem 0;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+      border-radius: 10px;
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .form-container {
+      background: #e0e0e0;
+      border: 2px solid #999;
+      border-radius: 0;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .form-section {
+      background: white;
+      border: 2px solid #000;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-section-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary-blue);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .highlight-box {
+      background: var(--yellow-highlight);
+      border: 1px solid #000;
+      padding: 0.3rem 0.5rem;
+      font-weight: 700;
+      font-size: 1rem;
+      margin: 0.3rem 0;
+      display: inline-block;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    .radio-list {
+      margin-top: 0.5rem;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      padding: 0.25rem 0;
+      cursor: pointer;
+    }
+
+    .radio-option input[type="radio"] {
+      margin-right: 0.5rem;
+      cursor: pointer;
+      width: 16px;
+      height: 16px;
+    }
+
+    .radio-option label {
+      cursor: pointer;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+
+    .radio-option:hover {
+      background: var(--light-blue);
+    }
+
+    .radio-option.checked {
+      background: var(--light-blue);
+      font-weight: 600;
+    }
+
+    .section-separator {
+      border-top: 1px dashed #999;
+      margin: 0.5rem 0;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .result-section {
+      background: #d0d0d0;
+      border: 2px solid #000;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .result-section h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .result-content {
+      background: white;
+      border: 1px solid #999;
+      padding: 1rem;
+      min-height: 150px;
+    }
+
+    .result-row {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .result-label {
+      font-weight: 600;
+      color: var(--primary-blue);
+    }
+
+    .result-value {
+      color: var(--text-primary);
+    }
+
+    .button-container {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .btn {
+      padding: 0.8rem 2rem;
+      font-size: 1rem;
+      font-weight: 700;
+      border: 2px solid #000;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #5a9fd4 0%, #4a8fc2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #4a8fc2 0%, #3a7fb2 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #e57373 0%, #d32f2f 100%);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(211, 47, 47, 0.4);
+    }
+
+    .warning-box {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .warning-icon {
+      color: #ff0000;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .warning-text {
+      color: #856404;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .new-tooling {
+      color: #d32f2f;
+      font-weight: 700;
+      margin-left: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 1.3rem;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .result-row {
+        grid-template-columns: 1fr;
+        gap: 0.3rem;
+      }
+
+      .button-container {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-content">
+      <h1>SPACER SELECTION FORM</h1>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="form-container">
+      <!-- Information Section -->
+      <div class="form-grid">
+        <div class="form-section">
+          <span class="form-section-title">Information</span>
+          <div>
+            <label style="font-size: 0.85rem; font-weight: 600;">Ø Cable (mm)</label>
+            <div class="highlight-box" id="cableDiameter">33,07</div>
+          </div>
+          <div style="margin-top: 0.5rem;">
+            <label style="display: flex; align-items: center; font-size: 0.85rem;">
+              <input type="checkbox" id="hightT" style="margin-right: 0.5rem;">
+              <span style="font-weight: 600;">Hight T°</span>
+            </label>
+          </div>
+          <div style="margin-top: 0.5rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Voltage (kV)</label>
+            <div class="highlight-box" id="voltage">700</div>
+          </div>
+          <div style="margin-top: 0.5rem;">
+            <label style="font-size: 0.85rem; font-weight: 600;">Ø Clamp</label>
+            <div class="highlight-box" id="clampDiameter">33,07</div>
+          </div>
+        </div>
+
+        <!-- Bundle + Body Section -->
+        <div class="form-section">
+          <span class="form-section-title">Bundle + Body</span>
+          <div class="radio-list">
+            <div class="radio-option">
+              <input type="radio" name="bundle" value="twin-sym" id="twin-sym" checked>
+              <label for="twin-sym">Twin Symmetrical</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="bundle" value="twin-vert" id="twin-vert">
+              <label for="twin-vert">Twin Vertical</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="bundle" value="triple-sym" id="triple-sym">
+              <label for="triple-sym">Triple Symmetrical</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="bundle" value="triple-asym" id="triple-asym">
+              <label for="triple-asym">Triple Asymmetrical</label>
+            </div>
+            <div class="section-separator"></div>
+            <div class="radio-option">
+              <input type="radio" name="bundle" value="sym-quad" id="sym-quad">
+              <label for="sym-quad">Symmetrical Quad</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="bundle" value="quad-sym-drilling" id="quad-sym-drilling">
+              <label for="quad-sym-drilling">Quad Symmetrical + body drilling</label>
+            </div>
+            <div class="section-separator"></div>
+            <div class="radio-option">
+              <input type="radio" name="bundle" value="asym-quad" id="asym-quad">
+              <label for="asym-quad">Asymmetrical Quad</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="bundle" value="asym-quad-drilling" id="asym-quad-drilling">
+              <label for="asym-quad-drilling">Asymmetrical Quad + body drilling</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="bundle" value="quad-diamant" id="quad-diamant">
+              <label for="quad-diamant">Quad Diamant</label>
+            </div>
+            <div class="section-separator"></div>
+            <div class="radio-option">
+              <input type="radio" name="bundle" value="sextuple" id="sextuple">
+              <label for="sextuple">Sextuple Symmetrical</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spacing Section -->
+        <div class="form-section">
+          <span class="form-section-title">Spacing</span>
+          <div class="radio-list">
+            <div class="radio-option">
+              <input type="radio" name="spacing" value="400" id="spacing-400">
+              <label for="spacing-400">400 mm</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="spacing" value="450-457" id="spacing-450">
+              <label for="spacing-450">450 mm / 457 mm</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="spacing" value="other" id="spacing-other">
+              <label for="spacing-other">Other spacing</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Elastomer hinge Section -->
+        <div class="form-section">
+          <span class="form-section-title">Elastomer hinge</span>
+          <div class="radio-list">
+            <div class="radio-option">
+              <input type="radio" name="elastomer" value="standard" id="elast-standard" checked>
+              <label for="elast-standard">Standard</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="elastomer" value="hr" id="elast-hr">
+              <label for="elast-hr">HR - High electrical resistance</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="elastomer" value="low-tc" id="elast-low">
+              <label for="elast-low">Low T°C</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="elastomer" value="equipotential" id="elast-equi">
+              <label for="elast-equi">Equipotential</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clamp type Section -->
+      <div class="form-section">
+        <span class="form-section-title">Clamp type</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 1.5rem;">
+          <div class="radio-option">
+            <input type="radio" name="clamp" value="bolted-stainless" id="clamp-bolted" checked>
+            <label for="clamp-bolted">Bolted / Stainless steel</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="clamp" value="bolted-breakaway" id="clamp-breakaway">
+            <label for="clamp-breakaway">Bolted / Breakaway</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="clamp" value="bolted-galvanized" id="clamp-galvanized">
+            <label for="clamp-galvanized">Bolted / Galvanized</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="clamp" value="with-aar" id="clamp-aar">
+            <label for="clamp-aar">with AAR Ø 7,87 mm (AAR3299-1221PB-»)</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" name="clamp" value="nutcracker" id="clamp-nutcracker">
+            <label for="clamp-nutcracker">Nutcracker >500kV EPDM</label>
+          </div>
+        </div>
+        
+        <div class="warning-box">
+          <span class="warning-icon">⚠</span>
+          <span class="warning-text">>400kV</span>
+          <span class="warning-text" style="margin-left: auto; font-style: italic;">400kV max</span>
+        </div>
+        <div style="color: #d32f2f; font-weight: 600; margin-top: 0.5rem; text-align: right;">
+          Voltage too high for preformed !
+        </div>
+      </div>
+
+      <!-- Results Section -->
+      <div class="result-section">
+        <h2>Detail of selected spacer</h2>
+        <div class="result-content">
+          <div class="result-row">
+            <div class="result-label">Ref. found</div>
+            <div class="result-label">Spacers reference</div>
+            <div class="result-label">Code AS400</div>
+          </div>
+          <div class="result-row">
+            <div class="result-value">-</div>
+            <div class="result-value" style="font-weight: 700; color: var(--primary-blue); font-size: 1.1rem;">SD2x40SCX34</div>
+            <div class="result-value">-</div>
+          </div>
+          <div class="result-row">
+            <div class="result-label">Ligne</div>
+            <div class="result-value">Double - 400 mm</div>
+            <div class="result-value">
+              <span class="new-tooling">1 new tooling require</span>
+            </div>
+          </div>
+          <div class="result-row">
+            <div class="result-label">10</div>
+            <div>
+              <div class="result-value">Élastomère charnière: Standard</div>
+              <div class="result-value" style="margin-top: 0.3rem;">Boulonnée / Inox</div>
+              <div class="result-value" style="margin-top: 0.3rem;">Capacity: Ø32,01 -Ø34</div>
+            </div>
+            <div class="result-value" style="text-align: right;">Machoire insert à créer: Europe_P</div>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="button-container">
+          <button class="btn btn-primary" onclick="backToList()">Back to list</button>
+          <button class="btn btn-danger" onclick="costCalculation()">Cost calculation</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Add checked class on radio selection
+    document.querySelectorAll('.radio-option input[type="radio"]').forEach(radio => {
+      radio.addEventListener('change', function() {
+        document.querySelectorAll(`.radio-option input[name="${this.name}"]`).forEach(r => {
+          r.closest('.radio-option').classList.toggle('checked', r.checked);
+        });
+      });
+      
+      // Initialize checked state
+      if (radio.checked) {
+        radio.closest('.radio-option').classList.add('checked');
+      }
+    });
+
+    function backToList() {
+      alert('Returning to list view...');
+    }
+
+    function costCalculation() {
+      alert('Opening cost calculation...');
+    }
+
+    // Update values dynamically
+    document.getElementById('hightT').addEventListener('change', function() {
+      console.log('High Temperature:', this.checked);
+    });
+  </script>
+</body>
+</html>
