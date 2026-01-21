@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dervaux - Spacer Selection Tool</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --primary: #0056b3;
+            --accent: #e74c3c;
+            --text-main: #2c3e50;
+            --text-light: #7f8c8d;
+            --border: #dcdde1;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Empêche le scroll global */
+        }
+
+        /* En cas de petit écran, on réactive le scroll */
+        @media (max-height: 850px) or (max-width: 1100px) {
+            body { overflow: auto; padding: 20px; height: auto; }
+        }
+
+        .app-container {
+            width: 95%;
+            max-width: 1200px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 15px 25px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 350px; /* Colonne Gauche (Form) | Droite (Résultat) */
+            gap: 0;
+        }
+
+        .form-section {
+            padding: 25px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            border-right: 1px solid var(--border);
+        }
+
+        /* Groupes de formulaires */
+        fieldset {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 0;
+        }
+
+        legend {
+            font-weight: bold;
+            font-size: 0.85rem;
+            color: var(--primary);
+            padding: 0 10px;
+        }
+
+        .input-row {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-row label { font-size: 0.9rem; flex: 1; }
+        
+        input[type="number"], input[type="text"] {
+            width: 80px;
+            padding: 5px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: #fff9c4; /* Jaune léger comme sur l'image */
+            font-weight: bold;
+        }
+
+        /* Style Boutons Radio Modernes */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .radio-item:hover { background: #f8f9fa; }
+        .radio-item input { cursor: pointer; margin: 0; }
+
+        /* Section Clamp (Largeur complète) */
+        .clamp-section {
+            grid-column: span 3;
+            margin-top: 10px;
+        }
+
+        .clamp-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* Panneau de Résultat (Droite) */
+        .result-panel {
+            background: #f8fbff;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .result-card {
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .ref-id {
+            color: var(--accent);
+            font-size: 1.4rem;
+            font-weight: 800;
+            display: block;
+            margin: 10px 0;
+        }
+
+        .specs-list {
+            text-align: left;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            list-style: none;
+            padding: 0;
+        }
+
+        .specs-list li { margin-bottom: 5px; border-bottom: 1px solid #eee; }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-outline { border: 1px solid var(--primary); color: var(--primary); background: transparent; }
+        .btn:hover { opacity: 0.9; }
+
+        .warning-box {
+            background: #fff5f5;
+            color: var(--accent);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            border-left: 4px solid var(--accent);
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <header>
+        <h1>Spacer Selection Form</h1>
+        <div style="font-size: 0.8rem; font-weight: bold;">Ligne: 10</div>
+    </header>
+
+    <div class="main-layout">
+        <div class="form-section">
+            
+            <fieldset>
+                <legend>Information</legend>
+                <div class="input-row">
+                    <label>Ø Cable (mm)</label>
+                    <input type="number" value="33.07" step="0.01">
+                </div>
+                <div class="radio-item">
+                    <input type="checkbox" id="hight"> <label for="hight">Hight T°</label>
+                </div>
+                <div class="input-row" style="margin-top:15px">
+                    <label>Voltage (kV)</label>
+                    <input type="number" value="700">
+                </div>
+                <div class="input-row" style="color:var(--accent)">
+                    <label>Ø Clamp</label>
+                    <strong>33,07</strong>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Bundle + Body</legend>
+                <div class="radio-group">
+                    <label class="radio-item"><input type="radio" name="bundle" checked> Twin Symmetrical</label>
+                    <label class="radio-item"><input type="radio" name="bundle"> Twin Vertical</label>
+                    <label class="radio-item"><input type="radio" name="bundle"> Triple Symmetrical</label>
+                    <label class="radio-item"><input type="radio" name="bundle"> Symmetrical Quad</label>
+                    <label class="radio-item"><input type="radio" name="bundle"> Asymmetrical Quad</label>
+                    <label class="radio-item"><input type="radio" name="bundle"> Sextuple Symmetrical</label>
+                </div>
+            </fieldset>
+
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <fieldset>
+                    <legend>Spacing</legend>
+                    <div class="radio-group">
+                        <label class="radio-item"><input type="radio" name="spacing" checked> 400 mm</label>
+                        <label class="radio-item"><input type="radio" name="spacing"> 450 / 457 mm</label>
+                        <label class="radio-item"><input type="radio" name="spacing"> Other spacing</label>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Elastomer hinge</legend>
+                    <div class="radio-group">
+                        <label class="radio-item"><input type="radio" name="hinge" checked> Standard</label>
+                        <label class="radio-item"><input type="radio" name="hinge"> HR : High Resistance</label>
+                        <label class="radio-item"><input type="radio" name="hinge"> Low T°C</label>
+                    </div>
+                </fieldset>
+            </div>
+
+            <fieldset class="clamp-section">
+                <legend>Clamp type</legend>
+                <div class="clamp-grid">
+                    <div class="radio-group">
+                        <label class="radio-item"><input type="radio" name="clamp" checked> Bolted / Stainless steel</label>
+                        <label class="radio-item"><input type="radio" name="clamp"> Bolted / Breakaway</label>
+                        <label class="radio-item"><input type="radio" name="clamp"> Bolted / Galvanized</label>
+                        <label class="radio-item"><input type="checkbox"> with AAR Ø 7,87 mm</label>
+                    </div>
+                    <div class="radio-group">
+                        <label class="radio-item"><input type="radio" name="clamp"> Nutcracker >500kV EPDM</label>
+                        <div class="warning-box">
+                            <strong>⚠️ Warning > 400kV</strong><br>
+                            Voltage too high for preformed.
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="result-panel">
+            <div>
+                <h3 style="margin-top:0; font-size: 1rem; color: var(--text-light)">Detail of selected spacer</h3>
+                <div class="result-card">
+                    <span style="font-size: 0.8rem; color: var(--text-light)">Reference found:</span>
+                    <span class="ref-id">SD2x40SCX34</span>
+                    
+                    <ul class="specs-list">
+                        <li><strong>Type:</strong> Double - 400 mm</li>
+                        <li><strong>Hinge:</strong> Symmetrical / Standard</li>
+                        <li><strong>Clamp:</strong> Bolted / Stainless Steel</li>
+                        <li><strong>Capacity:</strong> Ø32,01 - Ø34</li>
+                    </ul>
+                </div>
+                
+                <p style="font-size: 0.75rem; color: var(--accent); text-align: center; font-weight: bold; margin-top: 10px;">
+                    1 new tooling required<br>
+                    <span style="font-weight: normal; color: var(--text-light)">Insert to create: Europe_F</span>
+                </p>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-outline">Back to list</button>
+                <button class="btn btn-primary" style="background-color: #27ae60;">Cost calculation</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
